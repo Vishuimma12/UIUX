@@ -2,19 +2,19 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Calendar, 
-  Cloud, 
   Bell, 
   TrendingUp, 
-  Clock,
-  Thermometer,
-  MapPin
+  Clock
 } from 'lucide-react';
 import Card from '../UI/Card';
+import WeatherCard from '../UI/WeatherCard';
 import VoiceButton from '../UI/VoiceButton';
 import { useVoice } from '../../hooks/useVoice';
+import { useWeather } from '../../hooks/useWeather';
 
 const Home: React.FC = () => {
   const { isListening, startListening, stopListening } = useVoice();
+  const { weather, loading, error, refreshWeather } = useWeather();
   
   const handleVoiceToggle = () => {
     if (isListening) {
@@ -104,22 +104,12 @@ const Home: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <Card gradient>
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center mb-2">
-                <MapPin size={16} className="text-white/60 mr-1" />
-                <span className="text-white/80 text-sm">San Francisco</span>
-              </div>
-              <p className="text-3xl font-bold text-white">72°F</p>
-              <p className="text-white/60">Partly Cloudy</p>
-            </div>
-            <div className="text-right">
-              <Cloud size={48} className="text-white/80 mb-2" />
-              <p className="text-white/60 text-sm">H: 75° L: 65°</p>
-            </div>
-          </div>
-        </Card>
+        <WeatherCard 
+          weather={weather}
+          loading={loading}
+          error={error}
+          onRefresh={refreshWeather}
+        />
       </motion.div>
 
       {/* Quick Actions */}

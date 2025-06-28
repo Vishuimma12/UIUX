@@ -21,6 +21,11 @@ export interface WeatherData {
   condition: string;
   location: string;
   icon: string;
+  humidity?: number;
+  windSpeed?: number;
+  feelsLike?: number;
+  high?: number;
+  low?: number;
 }
 
 export type Theme = 'light' | 'dark' | 'auto';
