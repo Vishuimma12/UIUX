@@ -55,7 +55,7 @@ export const useWeather = () => {
 
   // Fetch weather data from OpenWeatherMap API
   const fetchWeather = useCallback(async (coords: GeolocationCoords) => {
-    const API_KEY = '2c8d5b5d4c8f4a5e9b2f1a3c7d9e6f8a'; // Demo API key - replace with your own
+    const API_KEY = '0a29ca5c1fd8703e7253eff202b7358f'; // Your OpenWeatherMap API key
     const API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=imperial`;
 
     try {
