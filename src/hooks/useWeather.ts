@@ -69,4 +69,64 @@ export const useWeather = () => {
       
       const weatherData: WeatherData = {
         temperature: Math.round(data.main.temp),
-        condition: data.weather[0].descripti
+        condition: data.weather[0].description,
+        icon: data.weather[0].icon,
+        location: data.name,
+        humidity: data.main.humidity,
+        windSpeed: Math.round(data.wind.speed),
+        feelsLike: Math.round(data.main.feels_like),
+        high: Math.round(data.main.temp_max),
+        low: Math.round(data.main.temp_min)
+      };
+
+      setWeather(weatherData);
+      setError(null);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch weather data';
+      setError(errorMessage);
+      setWeather(null);
+    }
+  }, []);
+
+  // Load weather data
+  const loadWeather = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const coords = await getCurrentLocation();
+      await fetchWeather(coords);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load weather';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, [getCurrentLocation, fetchWeather]);
+
+  // Refresh weather data
+  const refreshWeather = useCallback(async () => {
+    if (location) {
+      setLoading(true);
+      setError(null);
+      try {
+        await fetchWeather(location);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to refresh weather';
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      await loadWeather();
+    }
+  }, [location, fetchWeather, loadWeather]);
+
+  return {
+    weather,
+    loading,
+    error,
+    loadWeather,
+    refreshWeather
+  };
+};
